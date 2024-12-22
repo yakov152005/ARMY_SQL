@@ -70,28 +70,17 @@ VALUES (5, 1, 7.7, 1.3);
 INSERT INTO SHOTS(t_id, b_id, shot_x, shot_y)
 VALUES (5, 9, 7.7, 1.3);
 
--- דרך ראשונה
-SELECT training.base, shots.shot_number_id AS on_the_target
-FROM shots,
-     batches,
-     training
-WHERE shots.t_id = batches.t_id
-  AND shots.b_id = batch_id
-  AND shots.t_id = training_id
-  AND shot_x = batches.target_x
-  AND shot_y = batches.target_y;
 
--- דרך שניה
-SELECT training.base, shots.shot_number_id AS on_the_target
+SELECT 
+    shots.t_id AS training_id, 
+    COUNT(*) AS successful_shots
 FROM shots
-         JOIN batches
-              ON shots.t_id = batches.t_id
-                  AND shots.b_id = batch_id
-         JOIN training
-WHERE shots.t_id = training_id
-  AND shot_x = batches.target_x
-  AND shot_y = batches.target_y;
-
+JOIN batches
+    ON shots.t_id = batches.t_id
+    AND shots.b_id = batches.batch_id
+    AND shots.shot_x = batches.target_x
+    AND shots.shot_y = batches.target_y
+GROUP BY shots.t_id;
 -- --------------------------------------------------------------------------------------------------
 -- סעיף 8
 INSERT INTO BATCHES(t_id, c_id, target_x, target_y)
